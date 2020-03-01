@@ -1,0 +1,101 @@
+Student: Dumitriu Stefan-Alexandru
+Grupa: 311CC
+
+- Pentru a deschide jocul va trebui apelat ./battleship, impreuna cu argumente;
+  aceste argumente fiind fisierele de input pentru grid-ul jucatorului. Daca nr.
+  de argumente introduse este 0, se va iesi din functie fara a intra in joc.
+  Acelasi lucru se intampla si daca unul dintre numele fisierelor date nu este
+  corect. (in arhiva trimisa am pus 3 configuratii pentru harta jucatorului: 
+  player_map1, player_map2, player_map3 --> acestea au fost generate cu acelasi
+  algoritm pe baza caruia s-a generat harta calculatorului).
+- Fisierele de input au format de matrice 10x10 in care 0 reprezinta celula goala,
+  iar 1 barca.
+- Daca toate fisierele sunt corect introduse, se intra in jocul propriu-zis, 
+  incarcandu-se functia meniului principal. Acesta contine 4 optiuni, cea implicit
+  selectata fiind New Game, intre care se poate naviga cu sagetile sus/jos, optiunea
+  curenta fiind afisata grafic prin atributul A_REVERSE (se inverseaza culoarea de bg
+  si fg). Daca nu exista un joc creat Resume Game apare cu rosu si nu se poate selecta.
+  Se poate iesi din joc fie apasand tasta Q oricand, fie apasand ENTER pe Quit to Desktop.
+- In meniul de setari (bonus) exista doua optuni: Player Map Grid (daca se apasa ENTER cand este
+  selectata, se va intra intr-o interfata in care cu ajutorul sagetilor stanga/dreapta, se
+  poate selecta ce grid sa foloseasca jucatorul in cadrul jocului). De asemenea, drept bonus
+  am implementat sa se afiseze din fisierele primite ca argument cum va arata grid-ul respectiv
+  A doua optiune este Accent Color: daca se apasa ENTER sau sageata dreapta se va afisa o interfata
+  din care se poate alege dintre patru culori care vor deveni culorile care se folosesc in cadrul
+  jocului pentru a afisa segmentele de nave deja lovite (default e Rosu). Pentru a iesi se apasa
+  ENTER sau ESC sau sageata stanga (va ramane selectata optiunea care avea atributul REVERSE).
+- Din meniul principal, se intra in joc selectand optiunea New Game. Aici se va intra intr-o interfata
+  care imparte ecranul in doua: in stanga, grid-ul jucatorului, in dreapta cel al calculatorului. X 
+  reprezinta barca, spatiu, nimic. Initial, tot grid-ul calculatorului este reprezentat de *, adica
+  celule neselectate inca de jucator, ascunse.
+- Primul care va lovi este jucatorul, acesta parcurge grid-ul calculatorului prin sagetile sus/jos/
+  stanga/dreapta, apasand ENTER pe celula pe care doreste sa o loveasca. Aceasta va afisa fie spatiu,
+  adica nu a nimerit segment de barca, fie X cu culoarea de accent, adica a nimerit, avand din nou o mutare.
+  Dupa mutarea jucatorului, calculatorul va alege random o celula care nu a fost inca selectata, daca
+  nimereste se va colora X-ul de pe grid-ul jucatorului, daca nu, spatiul se va transforma in O (cerc),
+  pentru a oferi o idee jucatorului ce a ales cpu-ul, si pentru a-l ajuta mai departe pe cpu sa nu o mai
+  aleaga. Daca cpu-ul nimereste, va exista un delay de 1.5 sec (vezi functia delay din cod), (3 sec. mi s-a
+  parut prea mult), dupa care va alege o noua celula.
+- Un alt bonus adaugat este faptul ca daca jucatorul va apasa ENTER pe o celula deja descoperita, sub grid va
+  aparea un warning cum ca deja a ales celula respectiva, si sa selecteze alta casuta.
+- In interfata jocului apare permanent mesajul care informeaza jucatorul ca poate apasa TAB pentru
+  a deschide meniul optiunilor ingame, adica Destroy in advance si Randomize Map.
+- Tot prin sageata sus/jos si ENTER se aleg, daca nu se doreste nici o selectie, se apasa din nou TAB
+  (se va schimba si mesajul din dreapta jos din press TAB to open in press TAB to close).
+- Daca se alege Destroy in advance calculatorul si jucatorul vor lovi, la intamplare celule care nu au mai 
+  fost lovite, pentru 10 mutari fiecare (jucatorul nu va avea controlul asupra alegerii aici). Am pus
+  si un delay de 0.5 sec (aceeasi functie ca mai sus) pentru a fi mai placut vizual (stiu ca pe forum s-a
+  scris sa se arate instant, sper ca nu este vreo problema).
+- Daca se alege Randomize Map, algoritmul din spate va calcula dimensiunea barcilor din grid, introducand
+  intr-un vector de frecventa (vezi codul) cate barci de fiecare exista. Mai apoi se va reface matricea 
+  jucatorului intr-un mod indentic cu functia de randomizare a matricei calculatorului (functia randomize_matrix).
+  Apoi, se va reafisa noua matrice in mediul grafic (aceasta optiune mi se pare a fi cheating pentru
+  jucator si nu prea practica in jocul propriu zis, avand in vedere ca se elibereaza matricea de pozitii
+  ocupate, acum calculatorul putand lovi din nou orice celula)
+- Jocul se termina in momentul in care unul dintre playeri ajunge sa distruga toate navele (lucru implementat
+  printr-un hit_counter pentru fiecare jucator care trebuie sa ajunga la 20: o barca de 4, 2 de 3 etc.). De notat
+  este ca jocul se poate termina si prin jucatul jocului, dar si in functia de destroy in advance, in timpul rularii
+  acesteia daca se ajunge la acest hit_counter.
+- La final se va afisa cine a castigat, si numarul de barci distruse de fiecare (am pastrat si pentru barcile distruse
+  un contor, verifcand daca o barca a fost distrusa de fiecare data cand s-a nimerit un segment prin functia
+  check_destroyed, vezi codul ). Pentru a reveni in meniul principal, dupa cum scrie si pe ecran, se apasa ENTER.
+- Resume Game functioneaza daca in timpul jocului se va apasa ESC (se pastreaza existenta jocului intr-un int)
+  , la selectarea optiunii din meniul principal, luandu-se drept parametrii matricele modificate pentru a putea
+  sa printeze exact starea jocului la momentul in care s-a dat escape (matricele se reinitializeaza in timpul
+  programului doar daca se intra din nou intr-un nou joc).
+
+Cod:
+- O functie folosita de mine pentru generarea complet aleatorie a matricelor a fost srand(time(0)). Am 
+  observat ca folosind doar rand(), imi va genera o matrice random, dar aceeasi la fiecare rulare a programului
+  Prin functia srand eu ii dau un seed de la care sa inceapa rand() sa genereze secvente de numere aleatorii.
+  time(0) este o functie din time.h care reprezinta timpul curent, exprimat in sec (de la 1.ian.1970 cred),
+  astfel fiind singur ca srand va avea alt parametru mereu.
+- Functia de delay se foloseste de biblioteca time.h, implementand doua ceasuri (clock_t) care calculeaza
+  cat timp a trecut, ceasul now actualizandu-se in continuu. CLOCKS_PER_SEC (clock ticks in a sec) a fost folosita 
+  pentru a exprima intr-un mod in care sa inteleaga structura clock_t cat reprezinta o secunda.
+- In functiile de check_ship_size verific de la pozitia in care a fost lovita o barca, stanga/dreapta/sus/jos
+  daca mai exista segmente de barca (fie ca sunt lovite sau nu) si salvezi in patru parametrii "bounds-urile"
+  barcii pentru a verifica daca in matrice exista intre aceste bound-uri atatea valori de 3 (adica barca lovita)
+  cate segmente are barca (pentru a verifica daca este complet distrusa)
+- In cod se va observa ca in unele functii bordez matricea jucatorului de la una 10x10 la 12x12, deoarece
+  exista posibilitatea ca, verificand dimensiunea unui vapor unde coordonatele iau valoarea i-1, j-1 sa iasa
+  din bounds-urile matricii, aparand un seg. fault.
+- In mare, matricele principale (player_matrix, cpu_matrix, free_pos) au fost alocate dinamic si eliberate
+  la sfarsitul programului, si am inceract pe cat posibil in antetul functiilor sa definesc matricea ca 
+  dublu pointer (**mat). Exista insa si elemente care nu au fost alocate dinamic, precum matricele de char-uri
+  care contin textul cu optiuni pentru diferite meniuri s.a.m.d.
+
+Notes: In general, pentru a iesi dintr-o interfata accesata se va apasa tasta ESC (am implementat tasta Q doar in
+	   meniul principal).
+	   In momentul in care cpu-ul face o mutare am setat cursorul pe 0 pentru a nu sari in grid-ul meu, de asemenea
+	   acesta se dezactiveaza dupa ce player-ul a ales o casuta cu X (pentru a fi mai placut grafic), la apasarea 
+	   uneia dintre sageti pentru a iesi din celula anterior selectata acest cursor va reaparea.
+	   Chiar daca nu se observa, spatiile au fost si ele colorate cu culoarea de accent, pentru a fi mai placut
+	   grafic faptul ca acea celula deja a fost alesa (cand face blink cursorul in loc sa fie culoarea textului
+	   va fi culoarea de accent).
+	   !! In makefile, pe langa faptul ca imi creaza executabilul battleship prin comanda make. Am mai pus doua
+	   optiuni: make run, care ruleaza practic ./battleship (se poate modifca cu ce nume de fisiere se doreste dupa),
+	   deoarece make run va da eroare pentru ca nu exista fisiere de input. Si mai exista si comanda 
+	   make run-def-args, care va rula cu cele trei fisiere incluse de mine in arhiva.
+
+
