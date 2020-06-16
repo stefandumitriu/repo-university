@@ -1,0 +1,13 @@
+Dumitriu Stefan Alexandru, 311CC
+Feedback: Mi s-a parut o tema reusita, chiar extrem de interesanta pentru mine, avand in vedere ca fiind anul 1 nu am avut sansa sa abordez bazele ML, A.I., chiar niste task-uri bine alese, cu cerinte care m-au facut sa ma interesez mai in detaliu (mai ales task-urile 3 si 4). Responsabilii temei si-au facut foarte bine treaba, probabil fara sa citesc hint-urile si discutiile de pe forum nu faceam tema nici in proportie de 50%(au o contributie si colegii mei de serie care au pus intrebari bune, si au insistat cand nu au inteles). 10/10
+
+Detalii implementare:
+Task 1: GPS -> mi s-a parut un task greu pentru unul introductiv in tema, m-a luat prin surprindere, dar mai mult din rationamente logice decat de metode numerice. A fost interesant sa gasesc un pattern pentru oricate linii ar avea acel triunghi, am grupat intersectiile ca exterioare, interioare si colturi(3), dupa care pentru fiecare am incercat sa vad intre ce noduri exista drum, apoi matricea s-a construit usor, fiind simetrica (asemanator cu graful neorientat).
+In rest, nu am avut idei de implementare iesite de comun, mi-a placut idea de CSR
+Task 2: Un task destul de usor, cam 90% din esenta era in enunt, probabil a fost mai greu a fost de abstractizat algoritmul in mai multe dimensiuni.
+Am folosit o matrice de clustere si un vector de centroizi pentru fiecare cluster, pastrand corespondenta indecsilor.
+La a doua parte am folosit o metoda brute-force, am luat fiecare punct, am vazut de care centroid e cel mai apropiat, am bagat distanta in cost.
+Task 3:
+Aici am folosit Householder de la laborator si SST adaptat pentru cazul general, nu neaparat matrice patratica. Dificultatea a stat in primul in rand in citirea pozelor din dataset, noroc ca am dat in checker de functia getImgNames, dupa care in vectorizarea algoritmului rgb2hsv. Am folosit functia find, care intoarce niste indecsi (in forma desfasurata a matricei), a unor elemente ce respecta anumite criterii, partea interesanta si grea a fost sa evit impartirea la 0 (delta putea avea anumiti indecsi 0), si mi-a venit greu sa gasesc acel & - "si", pe care l-am folosit in conditia find-ului.
+Task 4:
+Aici aveam totul in enunt, totusi am avut probleme cu procentul fiindca uitam sa fac acea transformare a matricei de vectori caracteristici in evaluare. 
